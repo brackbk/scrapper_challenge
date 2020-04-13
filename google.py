@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 import time
 from datetime import datetime
 
-class Scrap():
+class Google():
   def request(self, url):
     html = ''
     response = requests.get(url, headers= {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.38 Safari/537.36'})

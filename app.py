@@ -1,6 +1,6 @@
 #from scripts import forms
 from flask import Flask, request
-from scrap import Scrap
+from google import Google
 import sys
 import os 
 import json
@@ -12,25 +12,25 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     data = {}
-    scrap = Scrap()
+    google = Google()
     with open('produtos.csv') as csvfile:
         readCSV = csv.reader(csvfile, delimiter=';')
         resultAvg = []
         for row in readCSV:
             try:
-                html = scrap.request('http://www.google.com.br/search?tbm=shop&q={}&tbs=vw:g'.format(str(row[0]))) 
-                url = scrap.getUrl(html, 'Comparar')
-                data = scrap.getData(url.replace('?q','/online?q'), row)
-                resultAvg.append(scrap.averageData(data, row))
+                html = google.request('http://www.google.com.br/search?tbm=shop&q={}&tbs=vw:g'.format(str(row[0]))) 
+                url = google.getUrl(html, 'Comparar')
+                data = google.getData(url.replace('?q','/online?q'), row)
+                resultAvg.append(google.averageData(data, row))
                 if data: 
                     filename = row[0]
-                    scrap.writeToCsv(filename, data)  
+                    google.writeToCsv(filename, data)  
             except Exception as e: 
-                print('nao foi possivel captar dados:' + e)
+                print('nao foi possivel captar dados:' + str(e))
                 pass
     if resultAvg:
-        filename = 'media produtos'
-        scrap.writeToCsv(filename, resultAvg)
+        filename = 'media_produtos'
+        google.writeToCsv(filename, resultAvg)
     return json.dumps({
         'analiseCompleta': data,
         'analiseResumida': resultAvg
